@@ -40,10 +40,10 @@ db.query(sql, (err, result) =>{
 });*/
 
 //Route to register user
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { first_name, last_name, phone_number, email, password } = req.body;
  
-   db.query(`SELECT * FROM userP WHERE email = ?`, [email], (err, result) => {
+   db.query(`SELECT * FROM userP WHERE email = ?`, [email], async (err, result) => {
      if (err) {
        console.error('Error checking user', err);
    return res.status(500).json({ message: 'Error checking user' });
@@ -52,7 +52,8 @@ app.post('/register', (req, res) => {
        return res.status(400).json({message: "User already exists"})
      }
 
-     const hashedPassword = bcrypt.hash(password, 10);
+     try {
+     const hashedPassword = await bcrypt.hash(password, 10);
      
      const sql = `INSERT INTO userP (first_name, last_name, phone_number, email, password) VALUES (?, ?, ?, ?, ?);`;
 
@@ -63,6 +64,10 @@ app.post('/register', (req, res) => {
        }
        return res.status(200).json({message: 'User registered successfully'})
      });
+       }catch (hashError) {
+      console.error('Error hashing password', hashError);
+      return res.status(500).json({ message: 'Error processing request' });
+     }
    });
 });
 
