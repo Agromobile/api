@@ -40,7 +40,7 @@ db.query(sql, (err, result) =>{
 });*/
 
 //Create table userB
-const sql = `CREATE TABLE IF NOT EXISTS userP (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
+const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
 
 db.query(sql, (err, result) =>{
   if (err) {
