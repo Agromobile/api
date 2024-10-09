@@ -40,14 +40,44 @@ db.query(sql, (err, result) =>{
 });*/
 
 //Create table userB
-const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
+// const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
 
-db.query(sql, (err, result) =>{
-  if (err) {
-    console.error('Error creating table', err)
-    return;
-  }
-  console.log('Table created successfully')
+// db.query(sql, (err, result) =>{
+//   if (err) {
+//     console.error('Error creating table', err)
+//     return;
+//   }
+//   console.log('Table created successfully')
+// });
+
+//Register and input data into userB table
+app.post('/register/business', async (req, res) => {
+  const { b_name, b_phone_number, b_email, b_password, b_location } = req.body;
+  db.query(`SELECT * FROM userB WHERE b_email = ?`, [b_email], async (err, result) => {
+    if (err) {
+      console.error('Error checking user', err);
+      return res.status(500).json({ message: 'Error checking user' });
+    }
+    if (result.length > 0) {
+      return res.status(400).json({message: "User already exists"})
+    }
+
+    try {
+      const hashedPassword = await bcrypt.hash(b_password, 10);
+      const sql = `INSERT INTO userB (b_name, b_phone_number, b_email, b_password, b_location) VALUES (?, ?, ?, ?, ?)`;
+      
+      db.query(sql, [b_name, b_phone_number, b_email, hashedPassword, b_location], (err, result) => {
+        if (err) {
+          console.error('Error registering user', err);
+          return res.status(401).json({message: 'Error inserting user'})
+        }
+        return res.status(200).json({message: 'User registered successfully'})
+      })
+    } catch (hashError) {
+      console.error('Error hashing password', hashError);
+      return res.status(500).json({ message: 'Error processing request' });
+     }
+  });
 });
 
 //Route to register user
