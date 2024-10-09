@@ -28,7 +28,7 @@ db.connect((err) => {
   console.log('Connected to database')
 });
 
-//Create database table
+//Create database table userP
 /*const sql = `CREATE TABLE IF NOT EXISTS userP (user_id INT PRIMARY KEY AUTO_INCREMENT, first_name VARCHAR(255), last_name VARCHAR(255), phone_number VARCHAR(15), email VARCHAR(255), password VARCHAR(255))`;
 
 db.query(sql, (err, result) =>{
@@ -38,6 +38,17 @@ db.query(sql, (err, result) =>{
   }
   console.log('Table created successfully')
 });*/
+
+//Create table userB
+const sql = `CREATE TABLE IF NOT EXISTS userP (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
+
+db.query(sql, (err, result) =>{
+  if (err) {
+    console.error('Error creating table', err)
+    return;
+  }
+  console.log('Table created successfully')
+});
 
 //Route to register user
 app.post('/register', async (req, res) => {
