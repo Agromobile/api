@@ -14,10 +14,10 @@ dotenv.config();
 
 //Database connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'sql8.freemysqlhosting.net',
-  user: process.env.DB_USER || 'sql8736349',
-  password: process.env.DB_PASS || 'ukrwXrj4E3',
-  database: process.env.DB_DATABASE || 'sql8736349'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
 });
 
 db.connect((err) => {
