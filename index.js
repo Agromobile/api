@@ -3,14 +3,26 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken'
 
 
 const port = process.env.PORT || 3001;
 
+const corsOptions = {
+  origin: (origin, callback) => {
+    callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 dotenv.config();
+app.use(cookieParser());
 
 //Database connection
 const db = mysql.createConnection({
@@ -40,15 +52,15 @@ db.query(sql, (err, result) =>{
 });*/
 
 //Create table userB
-// const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
+/*const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
 
-// db.query(sql, (err, result) =>{
-//   if (err) {
-//     console.error('Error creating table', err)
-//     return;
-//   }
-//   console.log('Table created successfully')
-// });
+db.query(sql, (err, result) =>{
+  if (err) {
+    console.error('Error creating table', err)
+    return;
+  }
+  console.log('Table created successfully')
+});*/
 
 //Register and input data into userB table
 app.post('/register/business', async (req, res) => {
@@ -111,6 +123,59 @@ app.post('/register', async (req, res) => {
      }
    });
 });
+
+//User loggin
+app.post('/login/business', (req, res) => {
+  const { b_email, b_password } = req.body;
+
+  db.query('SELECT * FROM userB WHERE b_email = ?', [b_email], (err, results) => {
+    if (err || results.length === 0) return res.status(404).json({ error: 'User not found' });
+
+    const user = results[0];
+    const passwordIsValid = bcrypt.compareSync(b_password, user.b_password);
+
+    if (!passwordIsValid) return res.status(401).json({ error: 'Invalid password' });
+
+    const token = jwt.sign({ id: user.userB_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+   
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+    //res.status(200).json({ token });
+
+    res.json({message: 'login successful'});
+  });
+});
+
+//Personal user login
+app.post('/login/personal', (req, res) => {
+  const { email, password } = req.body;
+
+  db.query('SELECT * FROM userP WHERE email = ?', [email], (err, results) => {
+    if (err || results.length === 0) return res.status(404).json({ error: 'User not found' });
+
+    const user = results[0];
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
+
+    if (!passwordIsValid) return res.status(401).json({ error: 'Invalid password' });
+
+    const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+
+    res.json({message: 'login successful'});
+  });
+});
+
+//Middleware to protect routes
 
 //port connection
 app.listen(port, () => {
