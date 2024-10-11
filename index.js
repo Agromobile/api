@@ -62,6 +62,16 @@ db.query(sql, (err, result) =>{
   console.log('Table created successfully')
 });*/
 
+//create product table
+const sql = `CREATE TABLE IF NOT EXISTS products (id INT PRIMARY KEY AUTO_INCREMENT, userP_id INT, product_image VARCHAR(255), product_name VARCHAR(255), product_discount_price DECIMAL(10, 2), product_price DECIMAL(10, 2), FOREIGN KEY (userP_id) REFERENCES userP(user_id))`;
+
+db.query(sql, (err, result) => {
+  if (err) {
+    console.log('Failed to create table', err);
+  }
+  console.log('Products table created successfully');
+});
+
 //Register and input data into userB table
 app.post('/register/business', async (req, res) => {
   const { b_name, b_phone_number, b_email, b_password, b_location } = req.body;
@@ -191,7 +201,14 @@ const authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   });
-}
+};
+
+//Logout route
+app.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({message: 'logout successfully'});
+  console.log('logged out');
+})
 
 //port connection
 app.listen(port, () => {
