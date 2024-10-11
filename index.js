@@ -63,14 +63,15 @@ db.query(sql, (err, result) =>{
 });*/
 
 //create product table
-const sql = `CREATE TABLE IF NOT EXISTS products (id INT PRIMARY KEY AUTO_INCREMENT, userP_id INT, product_image VARCHAR(255), product_name VARCHAR(255), product_discount_price DECIMAL(10, 2), product_price DECIMAL(10, 2), FOREIGN KEY (userP_id) REFERENCES userP(user_id))`;
+/*const sql = `CREATE TABLE IF NOT EXISTS products (id INT PRIMARY KEY AUTO_INCREMENT, userP_id INT, product_image VARCHAR(255), product_name VARCHAR(255), product_discount_price DECIMAL(10, 2), product_price DECIMAL(10, 2), FOREIGN KEY (userP_id) REFERENCES userP(user_id))`;
 
 db.query(sql, (err, result) => {
   if (err) {
     console.log('Failed to create table', err);
   }
   console.log('Products table created successfully');
-});
+});*/
+
 
 //Register and input data into userB table
 app.post('/register/business', async (req, res) => {
@@ -202,6 +203,60 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+//Protected route
+app.get('/protected', authenticateToken, (req, res) => {
+  res.status(200).json({message: 'You are authenticated, continue'});
+});
+
+
+//Insert into proucts table
+app.post('/create/product', authenticateToken, (req, res) => {
+  const { product_image, product_name, product_discount_price, product_price } = req.body;
+  const userid = req.user.id;
+
+  const sql = `INSERT INTO products (userP_id, product_image, product_name, product_discount_price, product_price) VALUES(?, ?, ?, ?, ?)`;
+
+  db.query(sql, [userid, product_image, product_name, product_discount_price, product_price], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Database error' }), console.log(err);
+    res.status(201).json({ message: 'Product created successfully' });
+  });
+});
+
+//Fetch the products
+app.get('/get/product', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM products JOIN userP ON products.userP_id = userP.user_id WHERE user_id = ?`;
+  const userid = req.user.id;
+
+  db.query(sql, [userid], (err, result) => {
+    if (err) {
+      res.status(404).json({message: 'Not found'})
+    }
+    res.status(200).json(result)
+  })
+});
+
+//Update password
+app.post('/editpassword', authenticateToken, async (req, res) => {
+  const { password } = req.body;
+  const userid = req.user.id;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const sql = `UPDATE userP SET password = ? WHERE user_id = ?`;
+
+    db.query(sql, [hashedPassword, userid], (err, result) => {
+      if (err) {
+        console.error('Error updating password', err);
+        return res.status(500).json({message: 'Error updating passwor'});
+      }
+      res.status(200).json({message: 'Password updated successfully'});
+    })
+  } catch (err) {
+    console.error('Error hashing password', err);
+    res.status(500).json({message: 'Error processing request'});
+  }
+});
+
 
 //Logout route
 app.post('/logout', (req, res) => {
