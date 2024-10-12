@@ -236,6 +236,21 @@ app.get('/get/product', authenticateToken, (req, res) => {
   })
 });
 
+
+//Fetch all products
+app.get('/products', authenticateToken, (req, res) => {
+  db.query(`SELECT * FROM products`, (err, result) => {
+    if (err) {
+      console.error('Error fetching products', err);
+      return res.status(500).json({message: 'Error Fetching products'});
+    }
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'})
+    }
+    res.status(200).json(result);
+  });
+});
+
 //Update password
 app.post('/editpassword', authenticateToken, async (req, res) => {
   const { password } = req.body;
