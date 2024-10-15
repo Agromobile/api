@@ -182,7 +182,7 @@ app.post('/login/personal', (req, res) => {
     });
 
 
-    res.json({message: 'login successful'});
+    res.status(200).json({message: 'login successful'});
   });
 });
 
