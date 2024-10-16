@@ -192,7 +192,7 @@ app.post('/login/personal', (req, res) => {
 const authenticateToken = (req, res, next) => {
 
   const token = req.cookies.token;
-  console.log(token);
+  console.log('My token is :', token);
   if (!token) 
     {
       return res.status(401).json({message: 'unauthorized'});
