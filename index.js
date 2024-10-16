@@ -256,6 +256,20 @@ app.get('/products', authenticateToken, (req, res) => {
   });
 });
 
+//Fetch userP details
+app.get('/user/personal/details', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM userP WHERE user_id = ?`;
+  const userid = req.user.user_id;
+
+  db.query(sql, [userid], (err, result) => {
+    if (err) {
+      console.error('Error fetching details', err);
+      return res.status(500).json({message: 'Error fetching details'});
+    }
+    res.status(200).json(result);
+  });
+});
+
 //Update password
 app.post('/editpassword', authenticateToken, async (req, res) => {
   const { password } = req.body;
