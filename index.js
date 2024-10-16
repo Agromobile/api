@@ -175,7 +175,7 @@ app.post('/login/personal', (req, res) => {
     if (!passwordIsValid) return res.status(401).json({ error: 'Invalid password' });
 
     const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log(token);
+    
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
