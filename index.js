@@ -151,8 +151,8 @@ app.post('/login/business', (req, res) => {
    
     res.cookie('token', token, {
       httpOnly: true,
-      //secure: process.env.NODE_ENV === 'production',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      //secure: true,
       sameSite: 'strict'
     });
 
@@ -178,7 +178,8 @@ app.post('/login/personal', (req, res) => {
     
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      //secure: process.env.NODE_ENV === 'production',
+      secure: true.
       sameSite: 'strict'
     });
 
