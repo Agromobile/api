@@ -151,8 +151,8 @@ app.post('/login/business', (req, res) => {
    
     res.cookie('token', token, {
       httpOnly: true,
-      //secure: process.env.NODE_ENV === 'production',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      //secure: true,
       sameSite: 'strict'
     });
 
@@ -175,7 +175,8 @@ app.post('/login/personal', (req, res) => {
     if (!passwordIsValid) return res.status(401).json({ error: 'Invalid password' });
 
     const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    
+    console.log(user.user_id);
+    console.log(token.id);
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
