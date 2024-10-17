@@ -260,7 +260,7 @@ app.get('/products', authenticateToken, (req, res) => {
 });
 
 //Fetch userP details
-app.get('/user/personal/details', authenticateToken, (req, res) => {
+app.get('/user/personal/details', (req, res) => {
   const sql = `SELECT * FROM userP WHERE user_id = ?`;
   const userid = req.user.user_id;
 
