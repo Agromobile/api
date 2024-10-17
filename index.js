@@ -153,6 +153,7 @@ app.post('/login/business', (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      //secure: true,
       sameSite: 'strict'
     });
 
@@ -178,12 +179,13 @@ app.post('/login/personal', (req, res) => {
     
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      //secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'strict'
     });
 
 
-    res.json({message: 'login successful'});
+    res.status(200).json({message: 'login successful'});
   });
 });
 
@@ -191,6 +193,7 @@ app.post('/login/personal', (req, res) => {
 const authenticateToken = (req, res, next) => {
 
   const token = req.cookies.token;
+  console.log('My token is :', token);
   if (!token) 
     {
       return res.status(401).json({message: 'unauthorized'});
@@ -251,6 +254,20 @@ app.get('/products', authenticateToken, (req, res) => {
     }
     if (result.length === 0) {
       return res.status(404).json({message: 'Product not found'})
+    }
+    res.status(200).json(result);
+  });
+});
+
+//Fetch userP details
+app.get('/user/personal/details', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM userP WHERE user_id = ?`;
+  const userid = req.user.user_id;
+
+  db.query(sql, [userid], (err, result) => {
+    if (err) {
+      console.error('Error fetching details', err);
+      return res.status(500).json({message: 'Error fetching details'});
     }
     res.status(200).json(result);
   });
