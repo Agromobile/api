@@ -178,7 +178,7 @@ app.post('/login/personal', (req, res) => {
     const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
     res.cookie('token', token, {
-      httpOnly: true,
+      //httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       //secure: true,
       sameSite: 'strict'
