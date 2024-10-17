@@ -179,8 +179,8 @@ app.post('/login/personal', (req, res) => {
     
     res.cookie('token', token, {
       httpOnly: true,
-      //secure: process.env.NODE_ENV === 'production',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      //secure: true,
       sameSite: 'strict'
     });
 
@@ -260,7 +260,7 @@ app.get('/products', authenticateToken, (req, res) => {
 });
 
 //Fetch userP details
-app.get('/user/personal/details', (req, res) => {
+app.get('/user/personal/details', authenticateToken, (req, res) => {
   const sql = `SELECT * FROM userP WHERE user_id = ?`;
   const userid = req.user.user_id;
 
