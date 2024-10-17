@@ -193,7 +193,7 @@ console.log('Current environment:', process.env.NODE_ENV);
 const authenticateToken = (req, res, next) => {
 
   const token = req.cookies.token;
-  console.log('My token is :', token);
+  
   if (!token) 
     {
       return res.status(401).json({message: 'unauthorized'});
@@ -264,12 +264,14 @@ app.get('/user/personal/details', authenticateToken, (req, res) => {
   const sql = `SELECT * FROM userP WHERE user_id = ?`;
   const userid = req.user.user_id;
 
+  console.log(userid);
   db.query(sql, [userid], (err, result) => {
     if (err) {
       console.error('Error fetching details', err);
       return res.status(500).json({message: 'Error fetching details'});
     }
-    console.log(result)
+    console.log('result',result)
+    console.log('result[0]', result[0]);
     res.status(200).json(result);
   });
 });
