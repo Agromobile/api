@@ -298,7 +298,11 @@ app.post('/editpassword', authenticateToken, async (req, res) => {
 
 //Logout route
 app.post('/logout', (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none'
+  });
   res.json({message: 'logout successfully'});
   console.log('logged out');
 })
