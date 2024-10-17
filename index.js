@@ -40,6 +40,7 @@ db.connect((err) => {
   console.log('Connected to database')
 });
 
+
 //Create database table userP
 /*const sql = `CREATE TABLE IF NOT EXISTS userP (user_id INT PRIMARY KEY AUTO_INCREMENT, first_name VARCHAR(255), last_name VARCHAR(255), phone_number VARCHAR(15), email VARCHAR(255), password VARCHAR(255))`;
 
