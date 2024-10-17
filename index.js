@@ -269,6 +269,7 @@ app.get('/user/personal/details', authenticateToken, (req, res) => {
       console.error('Error fetching details', err);
       return res.status(500).json({message: 'Error fetching details'});
     }
+    console.log(result)
     res.status(200).json(result);
   });
 });
