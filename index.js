@@ -178,12 +178,12 @@ app.post('/login/personal', (req, res) => {
     const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
     res.cookie('token', token, {
-      //httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production' ? true : false
       //secure: true,
       sameSite: 'strict'
     });
-
+console.log('Current environment:', process.env.NODE_ENV);
 
     res.status(200).json({message: 'login successful'});
   });
