@@ -179,7 +179,7 @@ app.post('/login/personal', (req, res) => {
     
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ? true : false
+      secure: process.env.NODE_ENV === 'production' ? true : false,
       //secure: true,
       sameSite: 'strict'
     });
