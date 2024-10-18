@@ -52,6 +52,7 @@ db.query(sql, (err, result) =>{
   console.log('Table created successfully')
 });*/
 
+
 //Create table userB
 /*const sql = `CREATE TABLE IF NOT EXISTS userB (userB_id INT PRIMARY KEY AUTO_INCREMENT, b_name VARCHAR(255), b_phone_number VARCHAR(15), b_email VARCHAR(255), b_password VARCHAR(255), b_location VARCHAR(255))`;
 
@@ -258,6 +259,58 @@ app.get('/products', authenticateToken, (req, res) => {
     res.status(200).json(result);
   });
 });
+
+//fetch product in fresh deal category
+app.get('/fresh/deal', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['fresh'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
+//fetch product in most popular in diary
+app.get('/popular', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['popular'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
+//Fetch product form provisions store
+app.get('/provision', authenticateToken, (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['provision'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
 
 //Fetch userP details
 app.get('/user/personal/details', authenticateToken, (req, res) => {
