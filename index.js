@@ -210,7 +210,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 //Protected route
-app.get('/protected', authenticateToken, (req, res) => {
+app.get('/protected', (req, res) => {
   res.status(200).json({message: 'You are authenticated, continue'});
 });
 
@@ -229,7 +229,7 @@ app.post('/create/product', authenticateToken, (req, res) => {
 });
 
 //Fetch the products
-app.get('/get/product', authenticateToken, (req, res) => {
+app.get('/get/product', (req, res) => {
   const sql = `SELECT * FROM products JOIN userP ON products.userP_id = userP.user_id WHERE user_id = ?`;
   const userid = req.user.id;
 
@@ -247,7 +247,7 @@ app.get('/get/product', authenticateToken, (req, res) => {
 
 
 //Fetch all products
-app.get('/products', authenticateToken, (req, res) => {
+app.get('/products', (req, res) => {
   db.query(`SELECT * FROM products`, (err, result) => {
     if (err) {
       console.error('Error fetching products', err);
@@ -261,7 +261,7 @@ app.get('/products', authenticateToken, (req, res) => {
 });
 
 //fetch product in fresh deal category
-app.get('/fresh/deal', authenticateToken, (req, res) => {
+app.get('/fresh/deal', (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ['fresh'], (err, result) => {
@@ -278,7 +278,7 @@ app.get('/fresh/deal', authenticateToken, (req, res) => {
 });
 
 //fetch product in most popular in diary
-app.get('/popular', authenticateToken, (req, res) => {
+app.get('/popular', (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ['popular'], (err, result) => {
@@ -295,7 +295,7 @@ app.get('/popular', authenticateToken, (req, res) => {
 });
 
 //Fetch product form provisions store
-app.get('/provision', authenticateToken, (req, res) => {
+app.get('/provision', (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ['provision'], (err, result) => {
