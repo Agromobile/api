@@ -184,7 +184,7 @@ app.post('/login/personal', (req, res) => {
       secure: true,
       sameSite: 'none'
     });
-console.log('Current environment:', process.env.NODE_ENV);
+//console.log('Current environment:', process.env.NODE_ENV);
 
     res.status(200).json({message: 'login successful'});
   });
@@ -319,7 +319,6 @@ const isAdmin = (req, res, next) => {
 db.query(`SELECT role FROM userP WHERE user_id = ?`, [userid], (err, result) => {
   
 const role = result[0].role;
-console.log(role);
 
   if (role !== 'admin') {
     return res.status(403).json({message: 'Unauthorized, only for admin'});
