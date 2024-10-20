@@ -311,6 +311,30 @@ app.get('/provision', authenticateToken, (req, res) => {
   });
 });
 
+//middleware to protect admin page
+const isAdmin = (req, res, next) => {
+  
+  const userid = req.user.id;
+
+db.query(`SELECT role FROM userP WHERE user_id = ?`, [userid], (err, result) => {
+  
+const role = result[0].role;
+console.log(role);
+
+  if (role !== 'admin') {
+    return res.status(403).json({message: 'Unauthorized, only for admin'});
+  }
+
+    res.status(200).json({message: 'Welcome admin'})
+    next();
+});
+};
+
+//Route to secure admin page
+app.get('/admin', authenticateToken, isAdmin, (req, res) => {
+  res.status(200).json({message: 'Welcome admin'})
+});
+
 
 //Fetch userP details
 app.get('/user/personal/details', authenticateToken, (req, res) => {
