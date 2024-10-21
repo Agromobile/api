@@ -311,6 +311,25 @@ app.get('/provision', (req, res) => {
   });
 });
 
+
+//Fetch product form fresh herbs category
+app.get('/hearbs', (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['hearbs'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
+
 //middleware to protect admin page
 const isAdmin = (req, res, next) => {
   
