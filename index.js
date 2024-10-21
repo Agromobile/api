@@ -35,15 +35,6 @@ const db = mysql.createPool({
   queueLimit: 0
 });
 
-/*db.connect((err) => {
-  if (err) {
-    console.error('Connection failed', err)
-    return;
-  }
-  console.log('Connected to database')
-});*/
-
-
 //Create database table userP
 /*const sql = `CREATE TABLE IF NOT EXISTS userP (user_id INT PRIMARY KEY AUTO_INCREMENT, first_name VARCHAR(255), last_name VARCHAR(255), phone_number VARCHAR(15), email VARCHAR(255), password VARCHAR(255))`;
 
@@ -161,8 +152,6 @@ app.post('/login/business', (req, res) => {
       sameSite: 'strict'
     });
 
-    //res.status(200).json({ token });
-
     res.json({message: 'login successful'});
   });
 });
@@ -187,7 +176,6 @@ app.post('/login/personal', (req, res) => {
       secure: true,
       sameSite: 'none'
     });
-//console.log('Current environment:', process.env.NODE_ENV);
 
     res.status(200).json({message: 'login successful'});
   });
@@ -436,7 +424,6 @@ app.post('/logout', (req, res) => {
     sameSite: 'none'
   });
   res.json({message: 'logout successfully'});
-  console.log('logged out');
 })
 
 //port connection
