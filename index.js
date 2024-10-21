@@ -313,10 +313,10 @@ app.get('/provision', (req, res) => {
 
 
 //Fetch product form fresh herbs category
-app.get('/hearbs', (req, res) => {
+app.get('/herbs', (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
-  db.query(sql, ['hearbs'], (err, result) => {
+  db.query(sql, ['herbs'], (err, result) => {
     if (err) {
       console.error('Error selecting product', err);
       return res.status(500).json({message: 'Error selecting product'});
@@ -350,7 +350,7 @@ app.get('/fruits', (req, res) => {
 app.get('/vegetable', (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
-  db.query(sql, ['hearbs'], (err, result) => {
+  db.query(sql, ['vegetable'], (err, result) => {
     if (err) {
       console.error('Error selecting product', err);
       return res.status(500).json({message: 'Error selecting product'});
