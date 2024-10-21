@@ -329,6 +329,40 @@ app.get('/hearbs', (req, res) => {
   });
 });
 
+// Fetch from fruits category
+app.get('/fruits', (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['fruits'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
+//Fetch from vegetables category
+app.get('/vegetable', (req, res) => {
+  const sql = `SELECT * FROM products WHERE category = ?`;
+
+  db.query(sql, ['hearbs'], (err, result) => {
+    if (err) {
+      console.error('Error selecting product', err);
+      return res.status(500).json({message: 'Error selecting product'});
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+    res.status(200).json(result)
+  });
+});
+
 
 //middleware to protect admin page
 const isAdmin = (req, res, next) => {
