@@ -25,20 +25,23 @@ dotenv.config();
 app.use(cookieParser());
 
 //Database connection
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE
+  database: process.env.DB_DATABASE,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect((err) => {
+/*db.connect((err) => {
   if (err) {
     console.error('Connection failed', err)
     return;
   }
   console.log('Connected to database')
-});
+});*/
 
 
 //Create database table userP
