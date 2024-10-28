@@ -434,6 +434,22 @@ app.get("/user/personal/details", authenticateToken, (req, res) => {
   });
 });
 
+//Product details by id
+app.get('/product/details/:id', (req, res) => {
+  const sql = 'SELECT * FROM products WHERE id = ?';
+  const productId = req.params.id;
+  
+  db.query(sql, [productId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json(results[0]);
+  });
+});
+
 //Update password
 app.post("/editpassword", authenticateToken, async (req, res) => {
   const { password } = req.body;
