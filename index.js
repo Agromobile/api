@@ -446,7 +446,7 @@ app.get('/product/details/:id', (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    res.json(results[0]);
+    res.status(200).json(results[0]);
   });
 });
 
