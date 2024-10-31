@@ -260,7 +260,7 @@ app.post("/create/product", authenticateToken, (req, res) => {
 });
 
 //Fetch the products
-app.get("/get/product", authenticateToken, (req, res) => {
+app.get("/get/product", (req, res) => {
   const sql = `SELECT * FROM products JOIN userP ON products.userP_id = userP.user_id WHERE user_id = ?`;
   const userid = req.user.id;
 
@@ -277,7 +277,7 @@ app.get("/get/product", authenticateToken, (req, res) => {
 });
 
 //Fetch all products
-app.get("/products", authenticateToken, (req, res) => {
+app.get("/products", (req, res) => {
   db.query(`SELECT * FROM products`, (err, result) => {
     if (err) {
       console.error("Error fetching products", err);
@@ -291,7 +291,7 @@ app.get("/products", authenticateToken, (req, res) => {
 });
 
 //fetch product in fresh deal category
-app.get("/fresh/deal", authenticateToken, (req, res) => {
+app.get("/fresh/deal", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["fresh"], (err, result) => {
@@ -308,7 +308,7 @@ app.get("/fresh/deal", authenticateToken, (req, res) => {
 });
 
 //fetch product in most popular in diary
-app.get("/popular", authenticateToken, (req, res) => {
+app.get("/popular", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["popular"], (err, result) => {
@@ -325,7 +325,7 @@ app.get("/popular", authenticateToken, (req, res) => {
 });
 
 //Fetch product form provisions store
-app.get("/provision", authenticateToken, (req, res) => {
+app.get("/provision", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["provision"], (err, result) => {
@@ -342,7 +342,7 @@ app.get("/provision", authenticateToken, (req, res) => {
 });
 
 //Fetch product form fresh herbs category
-app.get("/herbs", authenticateToken, (req, res) => {
+app.get("/herbs", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["herbs"], (err, result) => {
@@ -359,7 +359,7 @@ app.get("/herbs", authenticateToken, (req, res) => {
 });
 
 // Fetch from fruits category
-app.get("/fruits", authenticateToken, (req, res) => {
+app.get("/fruits", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["fruits"], (err, result) => {
@@ -376,7 +376,7 @@ app.get("/fruits", authenticateToken, (req, res) => {
 });
 
 //Fetch from vegetables category
-app.get("/vegetable", authenticateToken, (req, res) => {
+app.get("/vegetable", (req, res) => {
   const sql = `SELECT * FROM products WHERE category = ?`;
 
   db.query(sql, ["vegetable"], (err, result) => {
@@ -435,7 +435,7 @@ app.get("/user/personal/details", authenticateToken, (req, res) => {
 });
 
 //Product details by id
-app.get('/product/details/:id', authenticateToken, (req, res) => {
+app.get('/product/details/:id', (req, res) => {
   const sql = 'SELECT * FROM products WHERE id = ?';
   const productId = req.params.id;
   
