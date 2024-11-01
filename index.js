@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3001
 
 const corsOptions = {
   origin: (origin, callback) => {
