@@ -435,7 +435,7 @@ app.get("/user/personal/details", (req, res) => {
 });
 
 //Product details by id
-app.get('/product/details/:id', authenticateToken, (req, res) => {
+app.get('/product/details/:id', (req, res) => {
   const sql = 'SELECT * FROM products WHERE id = ?';
   const productId = req.params.id;
   
