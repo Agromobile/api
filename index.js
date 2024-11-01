@@ -228,7 +228,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 //Protected route
-app.get("/protected", (req, res) => {
+app.get("/protected", authenticateToken, (req, res) => {
   res.status(200).json({ message: "You are authenticated, continue" });
 });
 
@@ -420,7 +420,7 @@ app.get("/admin", authenticateToken, isAdmin, (req, res) => {
 });
 
 //Fetch userP details
-app.get("/user/personal/details", authenticateToken, (req, res) => {
+app.get("/user/personal/details", (req, res) => {
   const sql = `SELECT * FROM userP WHERE user_id = ?`;
   const userid = req.user.id;
 
